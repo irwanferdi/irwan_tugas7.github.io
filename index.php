@@ -55,6 +55,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit"])) {
 // Tampilkan Data
 $sql = "SELECT * FROM mahasiswa";
 $result = $conn->query($sql);
+
+// Tampilkan Data Untuk Search
+$search_prodi = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["search_prodi_submit"])) {
+    $search_prodi = $_POST["search_prodi"];
+}
+
+$sql = "SELECT * FROM mahasiswa";
+
+// Tambahkan kondisi pencarian jika search_prodi tidak kosong
+if (!empty($search_prodi)) {
+    $sql .= " WHERE program_studi LIKE '%$search_prodi%'";
+}
 ?>
 
 <!DOCTYPE html>
@@ -214,6 +228,16 @@ $result = $conn->query($sql);
             <input type="text" name="program_studi_edit" value="<?php echo isset($_POST['program_studi']) ? $_POST['program_studi'] : ''; ?>" required>
             
             <input type="submit" name="edit" value="Simpan Perubahan">
+        </form>
+    </div>
+    
+     <!-- Formulir Pencarian -->
+    <div class="form-container">
+        <h3>Pencarian Data Mahasiswa</h3>
+        <form action="index.php" method="post">
+            <label for="search_prodi">Cari berdasarkan Program Studi:</label>
+            <input type="text" name="search_prodi" value="<?php echo $search_prodi; ?>">
+            <input type="submit" name="search_prodi_submit" value="Cari">
         </form>
     </div>
     
